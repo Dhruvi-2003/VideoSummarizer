@@ -56,7 +56,7 @@
     </div>
 
     <div class="container">
-        <h5 id="stepHeading" class="text-center">Converting Video to Mp3</h5>
+        <h5 id="stepHeading" class="text-center">Welcome Folks!</h5>
         <div class="progress">
             <div id="progressBar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -65,85 +65,8 @@
             <p id="videoSummary"></p>
         </div>
     </div>
+    <script src="script.js"></script>
+      
+</body>
 
-    <script>
-        var progress = 0;
-        var currentStep = 1;
-        var progressBar = document.getElementById("progressBar");
-        var stepHeading = document.getElementById("stepHeading");
-        var startButton = document.getElementById("startButton");
-        var urlInput = document.getElementById("urlInput");
-        var videoSummary = document.getElementById("videoSummary");
-        var progressInterval;
-
-        // updates progress bar
-        function updateProgress() {
-            progressBar.style.width = progress + "%";
-            progressBar.setAttribute("aria-valuenow", progress);
-            progressBar.innerText = progress + "%";
-        }
-
-        //validates if the pasted link  is url or not
-        function validateURL(url) {
-            var urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
-
-            if (urlPattern.test(url)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        //checks the status of api used in our code
-        function checkAPIStatus() {
-            // Make an API request and check the status
-            fetch('https://api.example.com/status')
-                .then(response => {
-                    if (response.ok) {
-                        console.log('API is up and running!');
-                    } else {
-                        console.log('API is down.');
-                    }
-                })
-                .catch(error => {
-                    console.log('Error occurred while checking API status:', error);
-                });
-        }
-
-        // Call the function every 5 seconds
-        setInterval(checkAPIStatus, 5000);
-        //starts the progress when button is clicked
-        function startProgress() {
-            var url = urlInput.value; // Get the entered URL from the input field
-            if (!validateURL(url)) {
-                alert("Invalid URL. Please enter a valid URL.");
-                return;
-            }
-
-            progressInterval = setInterval(function () {
-                checkAPIStatus()
-                if (currentStep === 1 && progress < 20) {
-                    progress += 5; // Update the progress value here based on your backend data
-                    updateProgress();
-                } else {
-                    clearInterval(progressInterval);
-                    currentStep++; // Move to the next step
-                    if (currentStep === 2 && progress <= 90) {
-                        stepHeading.innerText = "Preparing Transcription";
-                        progress += 5;
-                        updateProgress();
-                        // Start the next progress here or wait for a signal from the backend
-                    } else if (currentStep === 3 && progress <= 100) {
-                        stepHeading.innerText = "Summarizing Text";
-                        progress += 5;
-                        updateProgress();
-                        // Start the next progress here or wait for a signal from the backend
-                    }
-                }
-            }, 5000); // Update progress every 5 seconds
-        }
-
-        startButton.addEventListener("click", startProgress);
-    </script>
-  </body>
 </html>
